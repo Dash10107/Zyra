@@ -1,0 +1,14 @@
+flask
+flask-cors 
+flask-restful 
+sqlalchemy 
+numpy 
+scipy 
+scikit-learn 
+openai 
+langchain 
+transformers 
+sentence-transformers 
+google-cloud-speech 
+perspective-api-client
+whisper
