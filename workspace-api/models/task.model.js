@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const taskSchema = new mongoose.Schema(
     {
       priority: {
@@ -63,5 +65,5 @@ const taskSchema = new mongoose.Schema(
     }
   );
   
-  module.exports = mongoose.model('Task', taskSchema);
+export default mongoose.model('Task', taskSchema);
   
