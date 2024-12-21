@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const calendarEventSchema = new mongoose.Schema(
     {
       userId: {
@@ -49,5 +51,5 @@ const calendarEventSchema = new mongoose.Schema(
     }
   );
   
-  module.exports = mongoose.model('CalendarEvent', calendarEventSchema);
+export default mongoose.model('CalendarEvent', calendarEventSchema);
   
