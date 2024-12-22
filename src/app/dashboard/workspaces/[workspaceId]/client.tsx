@@ -39,15 +39,17 @@ export const WorkspaceIdClient = () => {
       <Analytics 
         data={analytics}
       />
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <div className="w-full ">
+        <div className="grid grid-cols-2">
         <TaskList 
           data={tasks.documents} 
           total={tasks.total}  
-        />
+          />
         <ProjectList 
           data={projects.documents} 
           total={projects.total}
-        />
+          />
+        </div>
         <MemberList
           data={members.documents} 
           total={members.total}
