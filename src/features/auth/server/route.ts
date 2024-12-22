@@ -41,7 +41,7 @@ const app = new Hono()
     "/register",
     zValidator("json", registerSchema),
     async (c) => {
-      const { name, email, password } = c.req.valid("json");
+      const { name, email, password, city } = c.req.valid("json");
       
       const { account } = await createAdminClient();            // Instancia del adminClient -> account
       await account.create(                                     // Crea usuario en la base de datos desde la account
@@ -49,6 +49,7 @@ const app = new Hono()
         email,
         password,
         name,
+        city
       );
 
       const session = await account.createEmailPasswordSession( // Crea session desde account

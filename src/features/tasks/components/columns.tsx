@@ -58,6 +58,7 @@ export const columns: ColumnDef<Task>[] =  [
             className="size-6"
             name={project.name}
             image={project.imageUrl}
+            description={project.description}
           />
           <p className="line-clamp-1">{project.name}</p>
         </div>

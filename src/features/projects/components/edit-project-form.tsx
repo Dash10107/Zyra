@@ -30,7 +30,7 @@ interface EditProjectFormProps {
 }
 
 export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProps) => { // Formulario para crear un nuevo workspace con react-hook-form
-  
+  console.log(initialValues)
   const router = useRouter();
   const { mutate, isPending } = useUpdateProject();
   const { mutate: deleteProject, isPending: isDeletingProject } = useDeleteProject();
@@ -51,6 +51,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
     }
   });
 
+
   const handleDelete = async () => {  // Cuando se hace click en el boton de borrar -> se muestra el modal de confirmación
     const ok = await confirmDelete(); // y espera a que se resuelva la promesa
     if (!ok) return
@@ -67,8 +68,9 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
   const onSubmmit = (values: z.infer<typeof updateProjectSchema>) => {          // El submit recibe los values del form y se valida con el esquema
     const finalValues = {                                                       // Se crea un objeto  
       ...values,                                                                // con los valores del form
-      image: values.image instanceof File ? values.image : ""                   // y la imagen subida (sino existe (undefined) se usa un string vacío)
+      image: values.image instanceof File ? values.image : "",                   // y la imagen subida (sino existe (undefined) se usa un string vacío)
     }
+    console.log(finalValues)
     mutate({ 
       form: finalValues,
       param: { projectId: initialValues.$id },
@@ -128,6 +130,22 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
                         <Input 
                           {...field}
                           placeholder="Enter workspace name"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Description</FormLabel>
+                      <FormControl>
+                        <Input 
+                          {...field}
+                          placeholder="Enter workspace description"
                         />
                       </FormControl>
                       <FormMessage />

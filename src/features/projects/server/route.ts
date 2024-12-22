@@ -19,12 +19,13 @@ const app = new Hono()
       const databases = c.get("databases")                         // Obtiene el databases del contexto (establecido en el middleware)
       const user = c.get("user")                                   // Obtiene el user del contexto (establecido en el middleware)
 
-      const { name, image, workspaceId } = c.req.valid("form")     // Se valida el request (nombre del proyecto, la imagen y el workspaceId) según su esquema
+      const { name, image, workspaceId, description } = c.req.valid("form")     // Se valida el request (nombre del proyecto, la imagen y el workspaceId) según su esquema
 
       const member = await getMember({                             // Se comprueba si el usuario es miembro del workspace
         databases,
         workspaceId,
         userId: user.$id,
+        
       })
 
       if(!member){
@@ -55,7 +56,8 @@ const app = new Hono()
         {
           name,                                                    // y se almacena el nombre del workspace
           imageUrl: uploadedImageUrl,                              // y la URL de la imagen subida (avatar)
-          workspaceId                                              // y el workspace al que pertenece
+          workspaceId ,
+          description                                            // y el workspace al que pertenece
         }
       );
 
@@ -137,7 +139,7 @@ const app = new Hono()
       const user = c.get("user")
 
       const { projectId } = c.req.param()
-      const { name, image } = c.req.valid("form")
+      const { name, image, description } = c.req.valid("form")
 
       const existingProject = await databases.getDocument<Project>(  // Obtenemos el proyecto
         DATABASE_ID,
@@ -178,7 +180,8 @@ const app = new Hono()
         projectId,
         {
           name,                                                     // y se almacena el nombre del workspace
-          imageUrl: uploadedImageUrl,                               // y la URL de la imagen subida (avatar)
+          imageUrl: uploadedImageUrl,   
+          description                            // y la URL de la imagen subida (avatar)
         }
       );
 

@@ -26,6 +26,7 @@ export const getCurrent = async() => { // Función para obtener el user logueado
 
     const { account } = await createSessionClient();
     const user = await account.get();                                          // se retorna el user logueado desde la cuenta
+    // randomly assign a city to the user
     return user;
   
 } catch(error){

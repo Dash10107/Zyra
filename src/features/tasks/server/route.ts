@@ -135,6 +135,8 @@ const app = new Hono()
         }
       })
 
+    
+
       return c.json({                                                       // Finalmente se retornan las tareas y cada tarea enriquecida                                                    
         data: {
           ...tasks,

@@ -15,9 +15,11 @@ export const WorkspaceIdJoinClient = () => {
         return <PageLoader />
       }
     
-      if(!initialValues){
-        return <PageError message='Project not found'/>
-      }
+      // console.log(initialValues)
+
+      // if(!initialValues){
+      //   return <PageError message='Project not found'/>
+      // }
 
    <div className="w-full lg:max-w-xl">
         <JoinWorkspaceForm

@@ -19,7 +19,7 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/components/ui/form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -27,34 +27,34 @@ import { registerSchema } from "../schemas"
 import { useRegister } from "../api/use-register"
 import { signUpWithGithub, signUpWithGoogle } from "@/lib/oauth"
 
-
-
+// Extend the schema to include the city field
+const updatedRegisterSchema = registerSchema.extend({
+  city: z.string().min(1, "City is required"),
+});
 
 export const SignUpCard = () => {
-
   const { mutate, isPending } = useRegister();
 
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<z.infer<typeof updatedRegisterSchema>>({
+    resolver: zodResolver(updatedRegisterSchema),
     defaultValues: {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      city: "", // Add default value for city
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerSchema>) => {
+  const onSubmit = (values: z.infer<typeof updatedRegisterSchema>) => {
     mutate({ json: values });
-  }
+  };
 
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
       <CardHeader className="flex items-center justify-center text-center p-7">
-        <CardTitle className="text-2xl">
-          Sign Up
-        </CardTitle>
+        <CardTitle className="text-2xl">Sign Up</CardTitle>
         <CardDescription>
-          By signin up, you agree to our{" "}
+          By signing up, you agree to our{" "}
           <Link href="/privacy">
             <span className="text-blue-700">Privacy Policy</span>
           </Link>{" "}
@@ -65,11 +65,11 @@ export const SignUpCard = () => {
         </CardDescription>
       </CardHeader>
       <div className="px-7 mb-2">
-        <DottedSeparator  />
+        <DottedSeparator />
       </div>
       <CardContent className="p-7">
         <Form {...form}>
-          <form 
+          <form
             className="space-y-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
@@ -121,7 +121,23 @@ export const SignUpCard = () => {
                 </FormItem>
               )}
             />
-            <Button          
+            <FormField
+              name="city"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Enter your city"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
               disabled={isPending}
               size="lg"
               className="w-full"
@@ -132,17 +148,17 @@ export const SignUpCard = () => {
         </Form>
       </CardContent>
       <div className="px-7">
-        <DottedSeparator  />
+        <DottedSeparator />
       </div>
       <CardContent className="p-7 flex flex-col gap-y-4">
-        <Button 
+        <Button
           onClick={() => signUpWithGoogle()}
           disabled={isPending}
           variant="secondary"
           size="lg"
           className="w-full"
         >
-          <FcGoogle className="mr-2 size-5"/>
+          <FcGoogle className="mr-2 size-5" />
           Login with Google
         </Button>
         <Button
@@ -152,7 +168,7 @@ export const SignUpCard = () => {
           size="lg"
           className="w-full"
         >
-          <FaGithub className="mr-2 size-5"/>
+          <FaGithub className="mr-2 size-5" />
           Login with Github
         </Button>
       </CardContent>
@@ -166,6 +182,5 @@ export const SignUpCard = () => {
         </CardContent>
       </div>
     </Card>
-  )
-}
-
+  );
+};

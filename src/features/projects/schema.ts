@@ -7,7 +7,8 @@ export const createProjectSchema = z.object({
     z.string().transform((value) => value === "" ? undefined : value),   // Una cadena (string), que puede ser transformada bajo ciertas condiciones.
   ])                                                                     // Si la cadena es vacía (""), se transforma en undefined. Si no está vacía, se deja el valor tal cual.
   .optional(),
-  workspaceId: z.string()
+  workspaceId: z.string(),
+  description: z.string().trim().min(1, "Required"),
 
 });
 
@@ -18,6 +19,7 @@ export const updateProjectSchema = z.object({
     z.string().transform((value) => value === "" ? undefined : value),   // Una cadena (string), que puede ser transformada bajo ciertas condiciones.
   ])                                                                     // Si la cadena es vacía (""), se transforma en undefined. Si no está vacía, se deja el valor tal cual.
     .optional(),
+    description: z.string().trim().min(1, "Required"),
   
 
 });

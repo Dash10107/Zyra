@@ -6,4 +6,5 @@ export type Project = Models.Document & {
   name: string;
   imageUrl: string;
   workspaceId: string;
+  description: string;
 }

@@ -37,6 +37,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => { // 
     resolver: zodResolver(createProjectSchema.omit({workspaceId: true})),
     defaultValues: {
       name: "",
+      description: "",
     }
   });
 
@@ -85,6 +86,22 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => { // 
                       <Input 
                         {...field}
                         placeholder="Enter project name"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project Description</FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field}
+                        placeholder="Enter project description"
                       />
                     </FormControl>
                     <FormMessage />
