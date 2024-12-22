@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { QueryProvider } from "@/components/query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ClerkProvider } from "@clerk/nextjs";
 
 
 
@@ -21,6 +22,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <ClerkProvider
+        appearance={{
+          layout: {
+            socialButtonsVariant: "iconButton",
+            logoImageUrl: "/icons/yoom-logo.svg",
+          },
+          variables: {
+            colorText: "#fff",
+            colorPrimary: "#0E78F9",
+            colorBackground: "#1C1F2E",
+            colorInputBackground: "#252A41",
+            colorInputText: "#fff",
+          },
+        }}
+      >
       <body
         className={cn(inter.className, "antialiased min-h-screen")}
       >
@@ -29,6 +45,7 @@ export default function RootLayout({
           {children}
         </QueryProvider>
       </body>
+      </ClerkProvider>
     </html>
   );
 }
