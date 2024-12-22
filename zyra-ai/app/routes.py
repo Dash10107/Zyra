@@ -9,7 +9,7 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
 import google.generativeai as genai
 # Load Whisper model
-model = whisper.load_model("base")  # Choose your Whisper model size
+whispermodel = whisper.load_model("base")  # Choose your Whisper model size
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 qa_model = AutoModelForSeq2SeqLM.from_pretrained("t5-small")
 qa_tokenizer = AutoTokenizer.from_pretrained("t5-small")
@@ -35,7 +35,7 @@ def process_audio():
     audio_file.save(audio_path)
 
     # Run Whisper to get transcription
-    transcription_result =   model.transcribe(audio_path)
+    transcription_result =   whispermodel.transcribe(audio_path)
     transcription_text = transcription_result['text']
 
     # Translate transcription to preferred language (example: Spanish)
@@ -67,7 +67,7 @@ async def summarize_recordings():
     audio_file.save(audio_path)
 
     # Transcribe audio using Whisper
-    transcription_result = model.transcribe(audio_path)
+    transcription_result = whispermodel.transcribe(audio_path)
     transcription_text = transcription_result['text']
     
     # Use Hugging Face Transformers for summarization
@@ -174,44 +174,49 @@ safety_settings = [
 ]
 
 system_instruction = """
-Instructions for Interacting with Eliza (GenMedix Therapy Assistant):
+Instructions for Interacting with Eliza (Zyra Therapy Assistant):
 
 1. Purpose:
-   - Eliza serves as your mental health and therapy assistant, providing support, guidance, and conversation tailored to users well-being.
-   - Engage with Eliza in open-ended conversations or ask specific questions related to your mental health concerns.
+   - Zyra serves as your mental health and therapy assistant, providing support, guidance, and conversation tailored to users well-being.
+   - Engage with Zyra in open-ended conversations or ask specific questions related to your mental health concerns.
 
 2. Safety and Privacy:
-   - Your privacy and confidentiality are of utmost importance. Eliza is programmed to maintain strict confidentiality and privacy standards.
+   - Your privacy and confidentiality are of utmost importance. Zyra is programmed to maintain strict confidentiality and privacy standards.
    - Avoid sharing sensitive personal information that could compromise your privacy or safety.
 
 3. Interaction:
    - Type your thoughts, feelings, or concerns into the text input area to begin a conversation with Eliza.
-   - Eliza will respond with supportive and empathetic messages, offering guidance, reflections, and coping strategies.
+   - Zyra will respond with supportive and empathetic messages, offering guidance, reflections, and coping strategies.
    - Always tell your name and GenMedix when asled to introduce yourself in any form
 
 4. Emergency Situations:
    - If you're experiencing a mental health crisis or emergency, please seek immediate assistance from a qualified mental health professional or emergency services.
-   - Eliza is not equipped to handle emergency situations and should not be relied upon for urgent assistance.
+   - Zyra is not equipped to handle emergency situations and should not be relied upon for urgent assistance.
 
 5. Model Information:
-   - Eliza operates on the Gemini 1.5 Flash model developed by GenMedix.
+   - Zyra operates on the Gemini 1.5 Flash model developed by Zyra.
    - The model has been configured with specific settings to ensure the quality, safety, and effectiveness of interactions.
+   -It returns answer in 100 words.
 
 6. Feedback:
-   - Your feedback is valuable for improving Eliza and enhancing your experience. Feel free to share your thoughts, suggestions, or concerns with us.
+   - Your feedback is valuable for improving Zyra and enhancing your experience. Feel free to share your thoughts, suggestions, or concerns with us.
 
-Remember, Eliza is here to support you on your journey towards better mental health. Let's engage in meaningful conversations together!
+Remember, Zyra is here to support you on your journey towards better mental health. Let's engage in meaningful conversations together!
 """
 
-model = genai.GenerativeModel(
+
+
+# Initialize Gemini model
+modelllm = genai.GenerativeModel(
     model_name="gemini-1.5-flash", 
     generation_config=generation_config,
     safety_settings=safety_settings,
     system_instruction=system_instruction
 )
 
+
 # Initialize chat outside of the endpoint
-mental_chat = model.start_chat(history=[])
+mental_chat = modelllm.start_chat(history=[])
 
 
 
@@ -234,23 +239,155 @@ async def ask_question():
         return jsonify({"error": str(e)}), 500
 
 
-@bp.route('/suggest_schedule', methods=['GET'])
-def suggest_schedule():
-    user_id = request.args.get('user_id')
-    result = scheduler.suggest_schedule(user_id)
-    return jsonify(result)
 
 
-@bp.route('/task/assign', methods=['POST'])
-def assign_task():
-    task_details = request.json
-    result = task_agent.assign_task(task_details)
-    return jsonify(result)
+from langchain_core.prompts import PromptTemplate
+# Define the prompt template
+prompt_template = PromptTemplate(
+    input_variables=["name", "description", "taskname", "task_description", "due_date", "status", "question"],
+    template=""" 
+You are an assistant aiding a user to understand and complete their tasks. Here is the project and task information:
 
-@bp.route('/chat/abuse', methods=['POST'])
-def check_abuse():
-    message = request.json.get('message')
-    result = abuse_filter.detect_abuse(message)
-    return jsonify(result)
+Project Name: {name}
+Project Description: {description}
+
+Task Name: {taskname}
+Task Description: {task_description}
+Due Date: {due_date}
+Status: {status}
+
+Question: {question}
+
+Provide a clear and actionable response that helps the user understand and complete the task effectively.
+"""
+)
 
 
+# Initialize the Gemini model (or any other LLM you prefer)
+gemini_model = genai.GenerativeModel(
+    model_name="gemini-1.5-flash",
+    generation_config=generation_config,
+    safety_settings=safety_settings,
+)
+chat = gemini_model.start_chat(history=[])
+
+
+
+@bp.route("/task-question", methods=["POST"])
+async def task_question():
+    try:
+        # Extract the task and question from the request body
+        data = request.json
+        task = data.get("task")
+        question = data.get("question")
+
+        if not task or not question:
+            return jsonify({"error": "Task and question must be provided."}), 400
+
+        # Extract task details
+        project = task.get("project", {})
+        name = project.get("name", "Unknown Project")
+        description = project.get("description", "No description provided.")
+
+        task_details = task.get("task", {})
+        taskname = task_details.get("taskname", "Unknown Task")
+        task_description = task_details.get("task_description", "No task description provided.")
+        due_date = task_details.get("due_date", "No due date specified.")
+        status = task_details.get("status", "Status unknown.")
+
+        # Generate the prompt using the template
+        prompt = prompt_template.format(
+            name=name,
+            description=description,
+            taskname=taskname,
+            task_description=task_description,
+            due_date=due_date,
+            status=status,
+            question=question
+        )
+        # set up the model amd return the response 
+        # Return the response to the user
+        response = chat.send_message(prompt).text
+        return jsonify({"response": response}), 200
+
+    except Exception as e:
+        # Handle exceptions and return an HTTP 500 error with the exception message
+        return jsonify({"error": str(e)}), 500
+
+
+timeline_prompt_template = PromptTemplate(
+    input_variables=["name", "description", "taskname", "task_description", "due_date", "status"],
+    template=f'''You are an intelligent and detail-oriented assistant specializing in project planning and management. Your role is to create an actionable, efficient, and well-structured timeline to help the user achieve their task within the specified deadline. Below are the details of the project and task:
+
+- **Project Name**: {name}
+- **Project Description**: {description}
+
+- **Task Name**: {taskname}
+- **Task Description**: {task_description}
+- **Due Date**: {due_date}
+- **Current Status**: {status}
+
+### Deliverables:
+Using the provided information, generate a timeline that includes the following:
+
+1. **Milestones and Deadlines**: Identify key stages in the task and their respective deadlines, ensuring they align with the final due date.
+2. **Actionable Steps**: Break down each milestone into specific, practical, and achievable tasks. Ensure that these steps are clear and unambiguous for the user to follow.
+3. **Time Allocation**: Allocate realistic durations for each step, considering the remaining time and the complexity of the task.
+4. **Resource Recommendations**: Suggest tools, platforms, or methodologies (if applicable) that can help the user complete each step effectively.
+5. **Risk Management Tips**: Identify potential risks or bottlenecks in the timeline and provide strategies to mitigate them.
+6. **Progress Tracking Suggestions**: Recommend simple ways to track progress, such as checklists, trackers, or status updates, ensuring the task stays on schedule.''')
+
+@bp.route('/timeline-task', methods=['POST'])
+async def timeline_task():
+    try:
+        data = request.json
+        task = data.get("task")
+        # Extract task details
+        project = task.get("project", {})
+        name = project.get("name", "Unknown Project")
+        description = project.get("description", "No description provided.")
+
+        task_details = task.get("task", {})
+        taskname = task_details.get("taskname", "Unknown Task")
+        task_description = task_details.get("task_description", "No task description provided.")
+        due_date = task_details.get("due_date", "No due date specified.")
+        status = task_details.get("status", "Status unknown.")
+
+        # Generate the prompt using the template
+        prompt = timeline_prompt_template.format(
+            name=name,
+            description=description,
+            taskname=taskname,
+            task_description=task_description,
+            due_date=due_date,
+            status=status,
+        )
+        # set up the model amd return the response 
+        # Return the response to the user
+        response = gemini_model.generate_content(prompt)
+        print(response)
+        return jsonify({"response": response.text}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@bp.route('/scheduler', methods=['POST'])
+async def scheduler():
+    try:
+        data = request.json
+        users = data.get("users")
+        usernames = [user.get("name") for user in users]
+
+        if not users:
+            return jsonify({"error": "No users provided."}), 400
+        # Extract the timezones of the users
+        timezones = [user["timezone"] for user in users]
+        # print(timezones)
+        # Generate the prompt using the template
+        scheduler_prompt = f"I need to schedule a meeting for the following participants: {', '.join(usernames)}. Please consider their respective time zones: {', '.join(timezones)}. Provide the three best options for meeting times, ensuring maximum overlap of their working hours for convenience. Present the results in GMT (Greenwich Mean Time) for uniformity.Additionally, include:A brief explanation of why each time slot was chosen, including the overlap percentage of working hours or any other relevant criteria.Assumptions you made (e.g., typical working hours or availability windows).Suggestions for improving availability if optimal overlap cannot be achieved.The goal is to balance participant convenience while optimizing for maximum attendance."
+        # set up the model amd return the response
+        response = gemini_model.generate_content(scheduler_prompt)
+        return jsonify({"response": response.text}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+        
