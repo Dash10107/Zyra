@@ -5,7 +5,7 @@ import Navbar from '@/components/meet-components/Navbar';
 import Sidebar from '@/components/meet-components/Sidebar';
 
 export const metadata: Metadata = {
-  title: 'YOOM',
+  title: 'ZYRA',
   description: 'A workspace for your team, powered by Stream Chat and Clerk.',
 };
 

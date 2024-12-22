@@ -35,7 +35,7 @@ export const EventCard = ({ id, title, project, assignee, status }: EventCardPro
 
   const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    router.push(`/workspaces/${workspaceId}/tasks/${id}`);
+    router.push(`/dashboard/workspaces/${workspaceId}/tasks/${id}`);
   }
   
   return (

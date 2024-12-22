@@ -50,7 +50,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
 
 
   return (
-    <Card className="w-full h-full border-none shadow-slate-200">
+    <Card className="w-full h-full border-none bg-slate-100">
       <CardHeader className="flex p-7">
         <CardTitle className="text-xl font-bold">
           Create a new task
@@ -86,7 +86,12 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }: Crea
                   <FormItem>
                     <FormLabel>Due Date</FormLabel>
                     <FormControl>
-                      <DatePicker {...field} />
+                      <input
+                        type="date"
+                        value={field.value || ""}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        className="w-full p-2 border rounded-lg"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

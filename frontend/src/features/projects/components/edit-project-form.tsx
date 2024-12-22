@@ -60,7 +60,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
       param: { projectId: initialValues.$id },
     }, {
       onSuccess: () => {
-        window.location.href=`/workspaces/${initialValues.workspaceId}`
+        window.location.href=`/dashboard/workspaces/${initialValues.workspaceId}`
       }
     })
   };
@@ -104,7 +104,7 @@ export const EditProjectForm = ({ onCancel, initialValues }: EditProjectFormProp
           <Button
             size="sm"
             variant="secondary"
-            onClick={onCancel ? onCancel : () => router.push(`/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}`)}
+            onClick={onCancel ? onCancel : () => router.push(`/dashboard/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}`)}
           >
             Back
             <ArrowLeftIcon  className="size-4 mr-2" />

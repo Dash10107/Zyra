@@ -108,7 +108,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
     }
   }
 
-  const fullInviteLink = `${window.location.origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
+  const fullInviteLink = `${window.location.origin}/dashboard/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
 
   const handleCopyInviteLink = () => {
     navigator.clipboard.writeText(fullInviteLink)
@@ -126,7 +126,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
           <Button
             size="sm"
             variant="secondary"
-            onClick={onCancel ? onCancel : () => router.push(`/workspaces/${initialValues.$id}`)}
+            onClick={onCancel ? onCancel : () => router.push(`/dashboard/workspaces/${initialValues.$id}`)}
           >
             Back
             <ArrowLeftIcon  className="size-4 mr-2" />

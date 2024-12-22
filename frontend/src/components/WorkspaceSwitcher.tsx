@@ -24,7 +24,7 @@ export const WorkspaceSwitcher = () => {
   const { open } = useCreateWorkspaceModal(); // modifica el estado de isOpen y maneja el parámetro de la URL.
 
   const onSelect = (id: string) => {
-    router.push(`/workspaces/${id}`)
+    router.push(`/dashboard//workspaces/${id}`)
   }
 
   return (

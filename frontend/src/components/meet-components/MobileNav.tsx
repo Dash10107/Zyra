@@ -12,7 +12,7 @@ const MobileNav = () => {
   const pathname = usePathname();
 
   return (
-    <section className="w-full max-w-[264px]">
+    <section className="w-full max-w-[264px] text-black">
       <Sheet>
         <SheetTrigger asChild>
           <Image
@@ -25,13 +25,9 @@ const MobileNav = () => {
         </SheetTrigger>
         <SheetContent side="left" className="border-none bg-dark-1">
           <Link href="/" className="flex items-center gap-1">
-            <Image
-              src="/icons/logo.svg"
-              width={32}
-              height={32}
-              alt="yoom logo"
-            />
-            <p className="text-[26px] font-extrabold text-white">YOOM</p>
+          <Link href="/">
+            <p className="font-extrabold text-3xl text-[#2463eb]">ZYRA</p>
+          </Link>
           </Link>
           <div className="flex h-[calc(100vh-72px)] flex-col justify-between overflow-y-auto">
             <SheetClose asChild>

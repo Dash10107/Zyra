@@ -44,7 +44,7 @@ export const Navigation = () => {
     <ul className="flex flex-col">
       { routes.map((item) => {
         
-        const fullHref = `/workspaces/${workspaceId}${item.href}`
+        const fullHref = `/dashboard/workspaces/${workspaceId}${item.href}`
         const isActive = pathname === fullHref
         const Icon = isActive ? item.activeIcon : item.icon
 
@@ -60,6 +60,11 @@ export const Navigation = () => {
           </Link>
         )
       })}
+      <Link href={"/mentalhealth"}>
+        <button className="w-full bg-blue-700 text-white font-bold hover:bg-blue-900 transition-all px-2 py-2 rounded-lg my-2 ">
+          Mental Assistant
+        </button>
+      </Link>
     </ul>
   )
 }

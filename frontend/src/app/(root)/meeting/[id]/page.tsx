@@ -6,7 +6,7 @@ import { StreamCall, StreamTheme } from '@stream-io/video-react-sdk';
 import { useParams } from 'next/navigation';
 import { Loader } from 'lucide-react';
 
-import { useGetCallById } from '../../../../hooks/useGetCallById';
+import { useGetCallById } from '@/hooks/useGetCallById';
 import Alert from '@/components/meet-components/Alert';
 import MeetingSetup from '@/components/meet-components/MeetingSetup';
 import MeetingRoom from '@/components/meet-components/MeetingRoom';

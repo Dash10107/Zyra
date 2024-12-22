@@ -70,7 +70,7 @@ export const MembersList = () => {
           variant="secondary"
           size="sm"
         >
-          <Link href={`/workspaces/${workspaceId}`}>
+          <Link href={`/dashboard/workspaces/${workspaceId}`}>
             <ArrowLeftIcon className="size-4 mr-2" />
             Back
           </Link>

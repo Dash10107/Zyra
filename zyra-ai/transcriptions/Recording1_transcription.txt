@@ -11,7 +11,7 @@
   It’s tight, but I think it’s doable as long as there are no unexpected delays. We’ll need to ensure each team sticks to their deliverables.
 
   Speaking of delays, there’s been an issue with the supplier for the raw materials. We might want to consider a backup vendor just in case.
-
++
   I can follow up on that and start looking for alternatives. We don’t want this to become a bottleneck later.
 
   Agreed. Let’s prioritize that. Anything else before we wrap up?

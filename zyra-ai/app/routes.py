@@ -245,7 +245,7 @@ from langchain_core.prompts import PromptTemplate
 # Define the prompt template
 prompt_template = PromptTemplate(
     input_variables=["name", "description", "taskname", "task_description", "due_date", "status", "question"],
-    template=""" 
+    template='''
 You are an assistant aiding a user to understand and complete their tasks. Here is the project and task information:
 
 Project Name: {name}
@@ -259,7 +259,7 @@ Status: {status}
 Question: {question}
 
 Provide a clear and actionable response that helps the user understand and complete the task effectively.
-"""
+'''
 )
 
 
@@ -317,7 +317,7 @@ async def task_question():
 
 timeline_prompt_template = PromptTemplate(
     input_variables=["name", "description", "taskname", "task_description", "due_date", "status"],
-    template=f'''You are an intelligent and detail-oriented assistant specializing in project planning and management. Your role is to create an actionable, efficient, and well-structured timeline to help the user achieve their task within the specified deadline. Below are the details of the project and task:
+    template='''You are an intelligent and detail-oriented assistant specializing in project planning and management. Your role is to create an actionable, efficient, and well-structured timeline to help the user achieve their task within the specified deadline. Below are the details of the project and task:
 
 - **Project Name**: {name}
 - **Project Description**: {description}

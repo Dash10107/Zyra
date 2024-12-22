@@ -33,7 +33,7 @@ export const TaskBreadcrumbs = ({ project, task }: TaskBreadcrumbsProps) => {
     
     mutate({ param: { taskId: task.$id } }, {
       onSuccess: () => {
-        router.push(`/workspaces/${workspaceId}/tasks`);
+        router.push(`/dashboard/workspaces/${workspaceId}/tasks`);
       }
     });
   }
@@ -46,7 +46,7 @@ export const TaskBreadcrumbs = ({ project, task }: TaskBreadcrumbsProps) => {
         image={project.imageUrl}
         className="size-6 lg:size-8"
       />
-      <Link href={`/workspaces/${workspaceId}/projects/${project.$id}`}>
+      <Link href={`/dashboard/workspaces/${workspaceId}/projects/${project.$id}`}>
         <p className="text-sm lg:text-lg font-semibold text-muted-foreground hover:opacity-75 transition">
           {project.name}
         </p>
