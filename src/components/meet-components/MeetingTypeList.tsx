@@ -13,6 +13,7 @@ import { Textarea } from './ui/textarea';
 import ReactDatePicker from 'react-datepicker';
 import { useToast } from './ui/use-toast';
 import { Input } from './ui/input';
+import { Calendar1, Disc2, Gauge, Plus, UserRound } from 'lucide-react';
 
 const initialValues = {
   dateTime: new Date(),
@@ -70,34 +71,36 @@ const MeetingTypeList = () => {
   const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
 
   return (
-    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4 text-black">
       <HomeCard
-        img="/icons/add-meeting.svg"
+        img={<Plus />}
         title="New Meeting"
         description="Start an instant meeting"
         handleClick={() => setMeetingState('isInstantMeeting')}
       />
       <HomeCard
-        img="/icons/join-meeting.svg"
+        img={<UserRound />}
         title="Join Meeting"
         description="via invitation link"
-        className="bg-blue-1"
+        className="bg-[#F5F5F5] text-black"
         handleClick={() => setMeetingState('isJoiningMeeting')}
       />
       <HomeCard
-        img="/icons/schedule.svg"
+        img={<Calendar1 />}
         title="Schedule Meeting"
         description="Plan your meeting"
-        className="bg-purple-1"
+        className="bg-[#F5F5F5] text-black"
         handleClick={() => setMeetingState('isScheduleMeeting')}
       />
       <HomeCard
-        img="/icons/recordings.svg"
+        img={<Disc2 />}
         title="View Recordings"
         description="Meeting Recordings"
-        className="bg-yellow-1"
+        className="bg-[#F5F5F5] text-black"
         handleClick={() => router.push('/recordings')}
       />
+
+      
 
       {!callDetail ? (
         <MeetingModal

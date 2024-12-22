@@ -1,3 +1,5 @@
+import { Label } from "recharts";
+
 export const sidebarLinks = [
   {
     imgURL: '/icons/Home.svg',
@@ -25,6 +27,11 @@ export const sidebarLinks = [
     route: '/personal-room',
     label: 'Personal Room',
   },
+  {
+    imgURL: '/icons/add-personal.svg',
+    route: '/dashboard',
+    Label: 'Dashboard',
+  }
 ];
 
 export const avatarImages = [

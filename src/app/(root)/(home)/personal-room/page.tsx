@@ -56,7 +56,7 @@ const PersonalRoom = () => {
   const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meetingId}?personal=true`;
 
   return (
-    <section className="flex size-full flex-col gap-10 text-white">
+    <section className="flex size-full flex-col gap-10 text-black">
       <h1 className="text-xl font-bold lg:text-3xl">Personal Meeting Room</h1>
       <div className="flex w-full flex-col gap-8 xl:max-w-[900px]">
         <Table title="Topic" description={`${user?.username}'s Meeting Room`} />
