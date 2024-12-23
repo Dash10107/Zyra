@@ -19,7 +19,9 @@ import { useCallback } from "react"
 import { useBulkUpdateTasks } from "../api/use-bulk-update-tasks"
 import { DataCalendar } from "./data-calendar"
 import { useProjectId } from "@/features/projects/hook/use-project-id"
-import Workflow from "./workflow"
+import Workflow from "./workflow";
+
+// error resolved
 
 interface TasksViewSwitcherProps {
   hideProjectFilter?: boolean;
