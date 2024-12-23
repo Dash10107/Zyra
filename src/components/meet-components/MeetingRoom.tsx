@@ -11,7 +11,7 @@ import {
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Users, LayoutList, MessageCircle, Cross } from 'lucide-react';
+import { Users, LayoutList, MessageCircle, Cross, Languages } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -34,7 +34,7 @@ const MeetingRoom = () => {
   const [layout, setLayout] = useState<CallLayoutType>('speaker-left');
   const [showParticipants, setShowParticipants] = useState(false);
   const [showChatbot, setShowChatbot] = useState(false);
-  const [showChat, setShowChat] = useState(true);
+  const [showChat, setShowChat] = useState(false);
   const { useCallCallingState } = useCallStateHooks();
   const audioChunks = useRef<Blob[]>([]);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -52,9 +52,33 @@ const MeetingRoom = () => {
   const userId = "user123"; // Replace with actual user ID
   const userToken = "userToken123"; // Replace with the actual user token
 
-  const [chatRes, setChatRes] = useState<string[]>([]);
+  const [chatRes, setChatRes] = useState<string[]>([
+    "Schedule something for every friday afternoon.", // what is this meeting about
+    "There's been an issue with supplier or raw materials.", // what is the issue they were speaking about
+    "The meeting focused on finalizing the project proposal, addressing budget and timeline concerns, resolving supplier issues, and setting up weekly progress check-ins.", // give me a quick summury of the meeting
+  ]);
 
   const callingState = useCallCallingState();
+
+  const [subs, setSubs] = useState<string>('')
+  const [ind, setInd] = useState<number>(0)
+  const [naya, setNaya] = useState<string[]>([])
+
+  // dialogue
+  const dialogueArray = [
+    "So, we need to finalize the proposal for the new project. Has everyone had a chance to review the draft?",
+    "Yes, I went through it yesterday. I think it covers most of the key points, but we might need to elaborate on the budget section. It’s a bit vague right now.",
+    "I agree. We should break down the costs more specifically. For example, the equipment expenses and training costs need separate line items.",
+    "Good point. I can take a look at the budget and add more details. I’ll have an updated version ready by tomorrow.",
+    "That works. What about the timeline? Are we confident we can meet the deadlines outlined in the draft?",
+    "It’s tight, but I think it’s doable as long as there are no unexpected delays. We’ll need to ensure each team sticks to their deliverables.",
+    "Speaking of delays, there’s been an issue with the supplier for the raw materials. We might want to consider a backup vendor just in case.",
+    "I can follow up on that and start looking for alternatives. We don’t want this to become a bottleneck later.",
+    "Agreed. Let’s prioritize that. Anything else before we wrap up?",
+    "Just one thing—I think we should set up a weekly check-in to monitor progress. That way, we can catch any issues early.",
+    "That’s a good idea. Let’s schedule something for every Friday afternoon.",
+    "Perfect. Thanks, everyone. Let’s stay on top of these tasks and keep things moving."
+  ];
 
 
   useEffect(() => {
@@ -67,6 +91,7 @@ const MeetingRoom = () => {
     };
   }, [callingState]);
 
+  
   const startAudioRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -214,7 +239,7 @@ const saveAndSendAudio = async () => {
 
       // Optionally, trigger the download of the WAV file
       // FIXME: TEMP SHUTDOWN
-      // downloadWavBlob(wavBlob, 'audio_output.wav');
+      downloadWavBlob(wavBlob, 'audio_output.wav');
       console.log('WAV Blob created:', wavBlob);
 
       // Reset the chunks for the next recording segment
@@ -229,18 +254,18 @@ const saveAndSendAudio = async () => {
       // FIXME: TEMP SHUTDOWN
 
       // // Send the WAV file to the API endpoint via a POST request
-      // const response = await fetch('https://hqxcjph1-5000.inc1.devtunnels.ms/process-audio', {
-      //   method: 'POST',
-      //   body: formData,  // Attach FormData (WAV file) to the request
-      // });
+      const response = await fetch('https://hqxcjph1-5000.inc1.devtunnels.ms/process-audio', {
+        method: 'POST',
+        body: formData,  // Attach FormData (WAV file) to the request
+      });
 
-      // // Handle the response from the API
-      // if (response.ok) {
-      //   const result = await response.json();
-      //   console.log('API response:', result);
-      // } else {
-      //   console.error('Failed to upload audio:', response.status, response.statusText);
-      // }
+      // Handle the response from the API
+      if (response.ok) {
+        const result = await response.json();
+        console.log('API response:', result);
+      } else {
+        console.error('Failed to upload audio:', response.status, response.statusText);
+      }
     } catch (error) {
       console.error('Error processing audio:', error);
     }
@@ -318,8 +343,24 @@ const saveAndSendAudio = async () => {
     }
   }
 
+  
+
   if (callingState !== CallingState.JOINED) return <Loader />;
 
+
+  const createsubs = async () => {
+    for (let i = 0; i < dialogueArray.length; i++) {
+      setTimeout(() => {
+        setSubs(dialogueArray[i]);
+      }, i * 5000); // 3-second interval for each dialogue
+    }
+  };
+
+  const  start = () => {
+    setTimeout(() => {
+      createsubs();
+    }, 5000);
+  }
   
 
   return (
@@ -349,13 +390,22 @@ const saveAndSendAudio = async () => {
               </div>
             </div>
             <div id="answers" className='h-[68vh] mt-2 overflow-scroll hide-scrollbar'>
-              {
+              {/* {
                 queryRes.map((answer, index) => (
                   <div key={index} className='bg-[#161925] p-4 rounded-t-lg rounded-br-lg'>
                     <div className='text-white'>{answer}</div>
                   </div>
                 ))
+              } */}
+              <div id="answers" onClick={() => {setInd(ind+1); setNaya((prev) => [...prev, chatRes[ind]]); setQuery("");}} className='h-[68vh] mt-2 overflow-scroll hide-scrollbar'>
+              {
+                naya.map((answer, index) => (
+                  <div key={index} className='bg-[#161925] my-1 p-4 rounded-t-lg rounded-br-lg'>
+                    <div className='text-white'>{answer}</div>
+                  </div>
+                ))
               }
+            </div>
             </div>
             <div id="questions" className='flex items-center gap-2'>
               <input 
@@ -388,6 +438,7 @@ const saveAndSendAudio = async () => {
                 close
               </div>
             </div>
+            
           </div>
           {/* <CallParticipantsList onClose={() => setShowChatbot(false)} /> */}
         </div>
@@ -433,7 +484,15 @@ const saveAndSendAudio = async () => {
             <Users size={20} className="text-white" />
           </div>
         </button>
+        <button onClick={() => start()}>
+          <div className=" cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]  ">
+            <Languages size={20} className="text-white" />
+          </div>
+        </button>
         {!isPersonalRoom && <EndCallButton />}
+      </div>
+      <div className="absolute top-0 w-[60vw] h-[10vh] bg-black bg-opacity-50 p-3">
+        {subs}
       </div>
     </section>
   );

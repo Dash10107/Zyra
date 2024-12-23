@@ -5,8 +5,8 @@ import { useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useRouter } from "next/navigation";
 
 import { useGetCallById } from "@/hooks/useGetCallById";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components//ui/button";
+import { useToast } from "@/components/meet-components/ui/use-toast";
 
 const Table = ({
   title,
