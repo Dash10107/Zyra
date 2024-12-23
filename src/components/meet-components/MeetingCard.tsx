@@ -20,7 +20,6 @@ interface MeetingCardProps {
 }
 
 const MeetingCard = ({
-  icon,
   title,
   date,
   isPreviousMeeting,

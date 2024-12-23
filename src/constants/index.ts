@@ -1,5 +1,5 @@
 import { Label } from "recharts";
-
+console.log(Label);
 export const sidebarLinks = [
   {
     imgURL: '/icons/Home.svg',

@@ -13,6 +13,7 @@ import ReactFlow, {
   EdgeChange,
   applyNodeChanges,
   applyEdgeChanges,
+  NodeProps,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -120,7 +121,7 @@ const Workflow: React.FC = () => {
   };
 
   // Function to handle the position update of the new node when dragging
-  const onNodeDrag = (event: any, node: Node) => {
+  const onNodeDrag = (event: React.DragEvent, node: Node) => {
     if (isAddingNode) {
       newNodePosition.current = { x: node.position.x, y: node.position.y };
     }

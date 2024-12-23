@@ -13,7 +13,7 @@ import { Textarea } from './ui/textarea';
 import ReactDatePicker from 'react-datepicker';
 import { useToast } from './ui/use-toast';
 import { Input } from './ui/input';
-import { Calendar1, Disc2, Gauge, Plus, UserRound } from 'lucide-react';
+import { Calendar1, Disc2, Plus, UserRound } from 'lucide-react';
 
 const initialValues = {
   dateTime: new Date(),

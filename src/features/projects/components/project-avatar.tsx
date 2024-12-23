@@ -8,10 +8,9 @@ interface ProjectAvatarProps {
   name: string;
   className?: string;
   fallbackClassName?: string;
-  description?: string;
 }
 
-export const ProjectAvatar = ({ image, name, className, fallbackClassName, description }: ProjectAvatarProps) => {
+export const ProjectAvatar = ({ image, name, className, fallbackClassName }: ProjectAvatarProps) => {
   
   if(image){
     return (

@@ -11,7 +11,7 @@ import {
   useCallStateHooks,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Users, LayoutList, MessageCircle, Cross, Languages } from 'lucide-react';
+import { Users, LayoutList, MessageCircle, Languages } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -41,16 +41,20 @@ const MeetingRoom = () => {
   const recordingInterval = useRef<NodeJS.Timeout | null>(null);
 
   const [participants, setParticipants] = useState<string[]>([]); // Track participants
-
+  console.log('participants:', participants);
+  console.log('participants:', setParticipants);
 
   // for chat
   const [query, setQuery] = useState<string>("");
   const [queryRes, setQueryRes] = useState<string[]>([]);
+  console.log(queryRes);
 
   const [chatio, setChatIo] = useState<string>("");
+  console.log(chatio, setChatIo);
 
   const userId = "user123"; // Replace with actual user ID
   const userToken = "userToken123"; // Replace with the actual user token
+  console.log(userId, userToken);
 
   const [chatRes, setChatRes] = useState<string[]>([
     "Schedule something for every friday afternoon.", // what is this meeting about
@@ -82,7 +86,7 @@ const MeetingRoom = () => {
 
 
   useEffect(() => {
-    if (callingState === CallingState.JOINED) {``
+    if (callingState === CallingState.JOINED) {
       startAudioRecording();
     }
 

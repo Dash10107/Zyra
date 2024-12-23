@@ -1,13 +1,10 @@
 'use client';
 
-import Image from 'next/image';
-
 import { cn } from '@/lib/utils';
-import { Plus } from 'lucide-react';
 
 interface HomeCardProps {
   className?: string;
-  img: any;
+  img: React.ReactNode;
   title: string;
   description: string;
   handleClick?: () => void;
