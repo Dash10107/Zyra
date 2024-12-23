@@ -62,6 +62,8 @@ const MeetingRoom = () => {
     "The meeting focused on finalizing the project proposal, addressing budget and timeline concerns, resolving supplier issues, and setting up weekly progress check-ins.", // give me a quick summury of the meeting
   ]);
 
+  console.log(setChatRes);
+
   const callingState = useCallCallingState();
 
   const [subs, setSubs] = useState<string>('')
@@ -132,7 +134,10 @@ const MeetingRoom = () => {
     }
   };
 
+
+
   const bufferToWave = (abuffer: AudioBuffer, offset = 0): Blob => {  
+    console.log(offset);
     const numOfChannels = abuffer.numberOfChannels;  
     const length = abuffer.length * numOfChannels * 2 + 44; // 16-bit PCM  
     const buffer = new ArrayBuffer(length);  
@@ -173,6 +178,7 @@ const MeetingRoom = () => {
   };  
   
   const setString = (dataView: DataView, offset: number, string: string): void => {
+    console.log(offset);
     for (let i = 0; i < string.length; i++) {
       dataView.setUint8(offset + i, string.charCodeAt(i));
     }
@@ -343,6 +349,7 @@ const saveAndSendAudio = async () => {
         setQueryRes((prev) => [...prev, response?.data?.answer]);
       }
     } catch (error) {
+      console.log('Error fetching answer:', error);
       console.warn('Error fetching answer...try again');
     }
   }
